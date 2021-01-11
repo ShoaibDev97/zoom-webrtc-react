@@ -1,22 +1,91 @@
-.App {
-  text-align: center;
+* {
+  box-sizing: border-box;
+  padding: 0;
+  margin: 0;
+  font-family: "Poppins", sans-serif;
+}
+.margin-center {
+  margin: 0 auto;
 }
 
-.App-logo {
-  height: 40vmin;
-}
-
-.App-header {
-  background-color: #282c34;
-  min-height: 100vh;
+.home-page {
+  height: 100vh;
+  width: 100vw;
   display: flex;
-  flex-direction: column;
-  align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
+  align-items: center;
+  margin: 0;
+  background-image: linear-gradient(
+      to bottom,
+      rgba(128, 126, 126, 0.8),
+      rgba(0, 0, 0, 0.5)
+    ),
+    url("./assets/bg.png");
+  background-size: cover;
+  background-position: center;
+}
+
+.home-page__container {
+  background: rgb(214, 214, 219);
+  background: linear-gradient(
+    90deg,
+    rgba(16, 17, 17, 0.1) 0%,
+    rgba(0, 0, 0, 0.5) 100%
+  );
+  min-width: 300px;
+  min-height: 400px;
+  padding: 35px;
+  box-shadow: 1px 1px 10px black;
+}
+.welcome {
+  text-transform: uppercase;
+  text-align: center;
+  font-weight: 600;
   color: white;
 }
+.home-page__button {
+  width: 100%;
+  margin-top: 25px;
+  background: rgb(22, 22, 149);
+  background: linear-gradient(
+    90deg,
+    rgba(22, 22, 149, 0.9) 0%,
+    rgba(0, 212, 255, 0.5) 100%
+  );
+  color: white;
+  outline: none;
+  border: none;
+  padding: 7px;
+  border-radius: 5px;
+  transition: 0.5s ease-in-out;
+}
 
-.App-link {
-  color: #09d3ac;
+.home-page__button:hover {
+  transform: scale(1.1);
+}
+.room-container {
+  margin-top: 30px;
+}
+
+.general-input {
+  width: 100%;
+  padding: 5px;
+  border-radius: 5px;
+  border: none;
+  outline: none;
+  padding-left: 10px;
+  margin-top: 15px;
+}
+.want-to {
+  margin-top: 10px;
+  color: white;
+}
+.want-to-container {
+  text-decoration: none;
+}
+..want-to-container:active {
+  text-decoration: none;
+}
+.want-to-container:hover {
+  text-decoration: none;
 }
