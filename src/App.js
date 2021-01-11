@@ -13,7 +13,7 @@ class App extends Component {
         <Route exact path="/" component={Home} />
         <Route exact path="/join-room" component={JoinRoom} />
         <Route exact path="/create-room" component={CreateRoom} />
-        <Route exact path="/:roomId" component={DisplayScreen} />
+        <Route exact path="/rooms/:roomId" component={DisplayScreen} />
         </Switch>
       </BrowserRouter>
     );

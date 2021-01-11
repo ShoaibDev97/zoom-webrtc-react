@@ -7,6 +7,8 @@ import Videos from "./components/videos";
 
 // import Chat from "./components/chat";
 import { BrowserRouter, Route, Link } from "react-router-dom";
+import Icons from "./components/icons/Icons";
+
 
 class DisplayScreen extends Component {
   constructor(props) {
@@ -117,12 +119,6 @@ class DisplayScreen extends Component {
       };
 
       pc.oniceconnectionstatechange = (e) => {
-        // if (pc.iceConnectionState === 'disconnected') {
-        //   const remoteStreams = this.state.remoteStreams.filter(stream => stream.id !== socketID)
-        //   this.setState({
-        //     remoteStream: remoteStreams.length > 0 && remoteStreams[0].stream || null,
-        //   })
-        // }
       };
 
       pc.ontrack = (e) => {
@@ -220,7 +216,7 @@ class DisplayScreen extends Component {
       const status =
         data.peerCount > 1
           ? `Total Connected Peers to room ${window.location.pathname}: ${data.peerCount}`
-          : `Waiting for other user to connect... ${data.userName}`;
+          : `Waiting for other user to connect... `;
 
       this.setState({
         status: status,
@@ -233,12 +229,10 @@ class DisplayScreen extends Component {
         status:
           data.peerCount > 1
             ? `Total Connected Peers to room ${window.location.pathname}: ${data.peerCount}`
-            : `Waiting for other users to connect ${data.userName}`,
+            : `Waiting for other users to connect... `,
       });
     });
 
-    // ************************************* //
-    // ************************************* //
     this.socket.on("peer-disconnected", (data) => {
       // close peer-connection with this peer
       this.state.peerConnections[data.socketID].close();
@@ -410,9 +404,7 @@ class DisplayScreen extends Component {
     });
   };
 
-  // ************************************* //
-  // NOT REQUIRED
-  // ************************************* //
+  
   disconnectSocket = (socketToDisconnect) => {
     this.sendToPeer("socket-to-disconnect", null, {
       local: this.socket.id,
@@ -421,17 +413,24 @@ class DisplayScreen extends Component {
   };
 
   switchVideo = (_video) => {
-    // console.log(_video)
+    
     this.setState({
       selectedVideo: _video,
     });
   };
-
-  // ************************************* //
-  // ************************************* //
   stopTracks = (stream) => {
     stream.getTracks().forEach((track) => track.stop());
   };
+
+  handlerDisconnect = () =>{
+    this.setState({disconnected:true});
+  }
+
+  handlerClipboard = () =>{
+    let pathname = window.location.pathname.slice(7)
+    navigator.clipboard.writeText(pathname)
+    alert("Your Room is copied share with your freinds")
+  }
 
   render() {
     const { status, messages, disconnected, localStream, peerConnections, remoteStreams } = this.state;
@@ -452,6 +451,8 @@ class DisplayScreen extends Component {
     }
 
     const statusText = <div style={{ color: "yellow", padding: 5 }}>{status}</div>;
+
+
 
     return (
       <div>
@@ -480,15 +481,9 @@ class DisplayScreen extends Component {
             position: "absolute",
           }}
         >
-          <i
-            onClick={(e) => {
-              this.setState({ disconnected: true });
-            }}
-            style={{ cursor: "pointer", paddingLeft: 15, color: "red" }}
-            class="material-icons"
-          >
-            highlight_off
-          </i>
+    
+          <Icons handler={this.handlerDisconnect} value="highlight_off" color="#7c0A02" />
+          <Icons handler={this.handlerClipboard} value="content_copy" color="#33A1C9"/>
           <div
             style={{
               margin: 10,
@@ -497,6 +492,7 @@ class DisplayScreen extends Component {
               borderRadius: 5,
             }}
           >
+            
             {statusText}
           </div>
         </div>

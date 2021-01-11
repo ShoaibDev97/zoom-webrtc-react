@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import {Link} from "react-router-dom"
+import { v4 as uuidv4 } from 'uuid';
 
 
  class CreateRoom extends Component {
@@ -10,16 +11,12 @@ import {Link} from "react-router-dom"
              user:"",
              roomId:"",
              fullRoomId:""
-
         }
     }
     
 
     componentDidMount() {
-        let roomPass = Array(20)
-        .fill('0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz~!@-#$')
-        .map(x => x[Math.floor(crypto.getRandomValues(new Uint32Array(1))[0] / (0xffffffff + 1) * x.length)])
-        .join('');
+        let roomPass = uuidv4();
         this.setState({roomPass})
     }
     
@@ -28,17 +25,24 @@ import {Link} from "react-router-dom"
         this.setState({user:e.target.value})
     }
 
-    handlerCreateRoom =async () =>{
-       await  this.setState({fullRoomId: this.state.roomPass.concat("-",this.state.user)} )
-        this.props.history.push(`/${this.state.fullRoomId}`)
+    handlerCreateRoom = () =>{
+     if(this.state.user.length <= 3){
+         alert("Kindly Enter Your Full Name...")
+     }
+     else{
+         this.changeRoute();
+        }
     }
 
+    changeRoute = async () =>{
+        await this.setState({fullRoomId: this.state.roomPass.concat("-",this.state.user)} )
+         this.props.history.push(`/rooms/${this.state.fullRoomId}`)
+    }
     render() {
         return (      
         <div className="home-page">
         <div className="home-page__container">
             <div className="welcome-container">
-            
                 <h4 className="welcome">Welcome to web RTC</h4>
             </div>
                 <div className="room-container">

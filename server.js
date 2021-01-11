@@ -22,7 +22,7 @@ app.get('/', (req, res, next) => { //default room
     res.sendFile(__dirname + '/build/index.html')
 })
 
-app.get('/:room', (req, res, next) => {
+app.get('/rooms/:room', (req, res, next) => {
   res.sendFile(__dirname + '/build/index.html')
 })
 const server = app.listen(port, () => console.log(`Example app listening on port ${port}!`))
