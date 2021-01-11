@@ -1,12 +1,7 @@
 import React, { Component } from "react";
-
 import io from "socket.io-client";
-
 import Video from "./components/video";
 import Videos from "./components/videos";
-
-// import Chat from "./components/chat";
-import { BrowserRouter, Route, Link } from "react-router-dom";
 import Icons from "./components/icons/Icons";
 
 
@@ -24,6 +19,7 @@ class DisplayScreen extends Component {
 
       status: "Please wait...",
 
+      // Google STUN Server 
       pc_config: {
         iceServers: [
           {
@@ -32,6 +28,7 @@ class DisplayScreen extends Component {
         ],
       },
 
+      // Default Vlaue of SDP Constraints 
       sdpConstraints: {
         mandatory: {
           OfferToReceiveAudio: true,
@@ -45,22 +42,13 @@ class DisplayScreen extends Component {
     };
 
     this.URL = "http://localhost:8082/";
-
-    // https://reactjs.org/docs/refs-and-the-dom.html
-    // this.localVideoref = React.createRef()
-    // this.remoteVideoref = React.createRef()
-
     this.socket = null;
-    // this.candidates = []
   }
 
   getLocalStream = () => {
     // called when getUserMedia() successfully returns - see below
-    // getUserMedia() returns a MediaStream object (https://developer.mozilla.org/en-US/docs/Web/API/MediaStream)
     const success = (stream) => {
       window.localStream = stream;
-      // this.localVideoref.current.srcObject = stream
-      // this.pc.addStream(stream);
       this.setState({
         localStream: stream,
       });
@@ -154,11 +142,6 @@ class DisplayScreen extends Component {
           remoteStreams = [...this.state.remoteStreams, remoteVideo];
         }
 
-        // const remoteVideo = {
-        //   id: socketID,
-        //   name: socketID,
-        //   stream: e.streams[0]
-        // }
 
         this.setState((prevState) => {
           // If we already have a stream in display let it stay the same, otherwise use the latest stream
@@ -213,24 +196,13 @@ class DisplayScreen extends Component {
     // making success connection and sending to socket io server side
     this.socket.on("connection-success", (data) => {
       this.getLocalStream();
-      const status =
-        data.peerCount > 1
-          ? `Total Connected Peers to room ${window.location.pathname}: ${data.peerCount}`
-          : `Waiting for other user to connect... `;
-
-      this.setState({
-        status: status,
-        messages: data.messages,
-      });
+      const status = data.peerCount > 1 ? `Total Connected users are : ${data.peerCount}`: `Waiting for other user to connect... `;
+      this.setState({status});
     });
-
+    
     this.socket.on("joined-peers", (data) => {
-      this.setState({
-        status:
-          data.peerCount > 1
-            ? `Total Connected Peers to room ${window.location.pathname}: ${data.peerCount}`
-            : `Waiting for other users to connect... `,
-      });
+      const status = data.peerCount > 1 ? `Total Connected users are : ${data.peerCount}`: `Waiting for other user to connect... `;
+      this.setState({status});
     });
 
     this.socket.on("peer-disconnected", (data) => {
@@ -434,19 +406,15 @@ class DisplayScreen extends Component {
 
   render() {
     const { status, messages, disconnected, localStream, peerConnections, remoteStreams } = this.state;
-
     if (disconnected) {
       // disconnect socket
       this.socket.close();
       // stop local audio & video tracks
       this.stopTracks(localStream);
-
       // stop all remote audio & video tracks
       remoteStreams.forEach((rVideo) => this.stopTracks(rVideo.stream));
-
       // stop all remote peerconnections
       peerConnections && Object.values(peerConnections).forEach((pc) => pc.close());
-
       return <div>You have successfully Disconnected</div>;
     }
 

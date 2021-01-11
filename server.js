@@ -42,7 +42,7 @@ io.on('connection', socket => {
    
     success: socket.id,
     peerCount: rooms[room].size,
-    messages: messages[room],
+    // messages: messages[room],
   })
 
   const broadcast = () => {
