@@ -41,7 +41,7 @@ class DisplayScreen extends Component {
       disconnected: false,
     };
 
-    this.URL = "http://localhost:8082/";
+    this.URL = "http://localhost:4000/";
     this.socket = null;
   }
 

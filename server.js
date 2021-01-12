@@ -9,7 +9,7 @@ var io = require('socket.io')
 
 // extracting app instance from express function
 const app = express()
-const port = 8082
+const port = 4000
 
 // creating object for rooms and messages 
 const rooms = {}
