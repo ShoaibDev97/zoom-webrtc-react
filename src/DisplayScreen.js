@@ -5,6 +5,7 @@ import Videos from "./components/videos";
 import Icons from "./components/icons/Icons";
 
 
+
 class DisplayScreen extends Component {
   constructor(props) {
     super(props);
@@ -40,7 +41,7 @@ class DisplayScreen extends Component {
       sendChannels: [],
       disconnected: false,
     };
-
+    this.localScreenRef = React.createRef();
     this.URL = "http://localhost:4000/";
     this.socket = null;
   }
@@ -184,6 +185,15 @@ class DisplayScreen extends Component {
     }
   };
 
+  handleSuccess1 = (stream) =>{
+      this.localScreenRef.current.srcObject = stream
+      console.log("I Am Screen",stream)
+  }
+
+  handleError1 = (e) =>{
+    console.log(e)
+  }
+
   componentDidMount = () => {
     // creating socket instance with localhost url and room query
     this.socket = io.connect(this.URL, {
@@ -199,6 +209,11 @@ class DisplayScreen extends Component {
       const status = data.peerCount > 1 ? `Total Connected users are : ${data.peerCount}`: `Waiting for other user to connect... `;
       this.setState({status});
     });
+
+
+    // navigator.mediaDevices.getDisplayMedia({video: true})
+    // .then(this.handleSuccess1, this.handleError1);
+
     
     this.socket.on("joined-peers", (data) => {
       const status = data.peerCount > 1 ? `Total Connected users are : ${data.peerCount}`: `Waiting for other user to connect... `;
@@ -443,6 +458,9 @@ class DisplayScreen extends Component {
         ></Video>
 
         <br />
+
+          {/* <video ref={this.localScreenRef} style={{width:"200px",height:"200px",position:"absolute",zIndex:"500"}} autoPlay/> */}
+
         <div
           style={{
             zIndex: 3,

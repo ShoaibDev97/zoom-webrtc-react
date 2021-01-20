@@ -9,7 +9,9 @@ class Video extends Component {
       // currentStream: new MediaStream(),
       // videoTrack: false,
       videoVisible: true,
+      showScreen:true
     };
+    this.screenShareRef = React.createRef();
   }
 
   componentDidMount() {
@@ -76,6 +78,22 @@ class Video extends Component {
     });
   };
 
+  handlerScreenSharefail = (e) =>{
+    console.log(e)
+  }
+  handlerScreenShareSuccess = (stream) =>{
+    this.screenShareRef.current.srcObject = stream;
+  }
+  shareScreen = (e) => {
+    this.setState({showScreen:!this.state.showScreen})
+    if(this.state.showScreen === true){
+        navigator.mediaDevices.getDisplayMedia({video:true}).then(this.handlerScreenShareSuccess,this.handlerScreenSharefail)
+    }
+    else{
+      this.screenShareRef.current.srcObject = null;
+    }
+  };
+
   render() {
     const muteControls = this.props.showMuteControls && (
       <div>
@@ -93,12 +111,20 @@ class Video extends Component {
         >
           {(this.state.camera && "videocam") || "videocam_off"}
         </i>
+        <i
+          onClick={this.shareScreen}
+          style={{ cursor: "pointer", padding: 5, fontSize: 20, color: (this.state.showScreen && "white") || "red" }}
+          class="material-icons"
+        >
+          {(this.state.showScreen && "screen_share") || "stop_screen_share"}
+        </i>
       </div>
     );
 
     return (
       <div style={{ ...this.props.frameStyle }} className={this.props.appliedClass}>
         {/* <audio id={this.props.id} muted={this.props.muted} ref={ (ref) => {this.video = ref }}></audio> */}
+        <video autoPlay ref={this.screenShareRef} style={{border:"2px solid white",width:"50px",position:"absolute"}} />
         <video
           id={this.props.id}
           muted={this.props.muted}
@@ -107,6 +133,7 @@ class Video extends Component {
             visibility: (this.state.videoVisible && "visible") || "hidden",
             ...this.props.videoStyles,
           }}
+
           // ref={ this.props.videoRef }
           ref={(ref) => {
             this.video = ref;
